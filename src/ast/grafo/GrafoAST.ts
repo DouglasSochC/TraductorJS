@@ -12,7 +12,7 @@ export class GrafoAST{
 
     getGrafo():String{
         let grafo = "digraph G{\n\n ";        
-        grafo += "  nodo0[label=\"AST\"];\n";
+        grafo += " nodo0[label=\"AST\"];\n";
         var g = new ValorGrafo(1, grafo);
         this.arbol.generarGrafo(g,"nodo0");
         

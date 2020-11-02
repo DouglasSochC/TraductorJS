@@ -1,9 +1,12 @@
 export enum Type{
-    NUMERIC,
-    STRING,
+    INT,
     BOOLEAN,
+    DOUBLE,
+    STRING,
+    CHAR,
     VOID
 }
+
 export enum TypeOperation{
     SUMA, RESTA, MULTIPLICACION, DIVISION, MENOSUNARIO,
     MAYOR, MENOR,

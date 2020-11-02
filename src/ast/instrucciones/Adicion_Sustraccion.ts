@@ -1,12 +1,11 @@
 import { Instruccion } from "../Instruccion"
-import { Type } from "../Tipo";
 import { ValorGrafo } from "../grafo/ValorGrafo";
 
-export class Declaracion extends Instruccion {
-    
+export class Adicion_Sustraccion extends Instruccion {
+
     id: String;
-    valor: Instruccion;
-    type: Type;
+    simbolouno: String;
+    simbolodos: String;
 
     /**
      * @class La instruccion declaracion, inserta una nueva variable en la tabla de simbolos
@@ -16,53 +15,50 @@ export class Declaracion extends Instruccion {
      * @param column columna donde se declaro la variable
      * @param valor valor de la expresion asociada a la variable
      */
-    constructor(type: Type, id: String, valor: Instruccion, line: Number, column: Number) {
+    constructor(id: String, simbolouno: String, simbolodos: String, line: Number, column: Number) {
         super(line, column)
         this.id = id;
-        this.type = type;
-        this.valor = valor;
+        this.simbolouno = simbolouno;
+        this.simbolodos = simbolodos;
     }
 
     translate() {
         // int a = 0;
-        return "var "+ this.id+" = "+ this.valor.translate() +";\n";
+        return this.id.toString() + this.simbolouno.toString() + this.simbolodos.toString();
     }
     generarGrafo(g: ValorGrafo, padre: String) {
-        let padreAux = padre; //Auxiar con nombre del padre
-        
-        //Tipo
-        let nombreHijo = "nodo" + g.contador;
-        g.grafo += "  " + nombreHijo + "[label=\" Tipo: " + Type[this.type] + "\"];\n";
-        g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
-        g.contador++;
 
         // Titulo Id
-        nombreHijo = "nodo" + g.contador;
+        let nombreHijo = "nodo" + g.contador;
         g.grafo += "  " + nombreHijo + "[label=\"ID\"];\n";
         g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
         g.contador++;
 
         let padreHijo = nombreHijo;
 
-        // Valor del Id
+        //Valor del Id
         nombreHijo = "nodo" + g.contador;
+
         g.grafo += "  " + nombreHijo + "[label= \"" + this.id + "\"];\n";
         g.grafo += "  " + padreHijo + " -> " + nombreHijo + ";\n";
         g.contador++;
 
-        if (this.valor != null) {
-            //Expresion
-            nombreHijo = "nodo" + g.contador;
-            g.grafo += "  " + nombreHijo + "[label=\"" + this.valor.getNombreHijo() + "\"];\n";
-            g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
-            g.contador++;
-            this.valor.generarGrafo(g, nombreHijo);
-        }
+        //Simbolo 1
+        nombreHijo = "nodo" + g.contador;
+        g.grafo += "  " + nombreHijo + "[label=\" Simbolo: " + this.simbolouno.toString() + "\"];\n";
+        g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
+        g.contador++;
+
+        //Simbolo 2
+        nombreHijo = "nodo" + g.contador;
+        g.grafo += "  " + nombreHijo + "[label=\" Simbolo: " + this.simbolodos.toString() + "\"];\n";
+        g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
+        g.contador++;
         return null;
 
 
     }
     getNombreHijo(): String {
-        return "DECLARACION"
+        return "ADICION_SUSTRACCION"
     }
 }

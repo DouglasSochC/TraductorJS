@@ -7,16 +7,37 @@ export function AnalizarJava(entrada:string):String{
     //Nota: Cuando no funciona algun funcionamiento de los nodos, hay que tomar en cuenta
     //si en realidad la funcion que tratamos de traducir tiene hijos
     let codigo = `
+        int hola=1, int hola2 =3, boolean prueba = "hola a todos";
+        public int suma(int x, int y, int z);
+       
+        public void suma(int x, int y){
+            int numero = 2;
+            String cadena = "Hola";
+            boolean flag = true; 
+            int a = 0.0;
+        }
 
-        public void suma(int x, int y, int z);
+        for(int i=1.0; i<10+4; i--){
+            System.out.println("hola");
+        }
 
+    `;
+
+    /*
+    
+        int hola=1, int hola2 =3, boolean prueba = "hola a todos";
+        public int suma(int x, int y, int z);
+       
         public void suma(int x, int y){
             int numero = 2;
             String cadena = "Hola";
             boolean flag = true; 
             numeric a = 0.0;
         }
-            
+
+        do{
+            System.out.println ("Contador" + (contador + 1) );
+        } while (contador<10);
 
         public class holamundo {
             int numero = 2;
@@ -38,8 +59,14 @@ export function AnalizarJava(entrada:string):String{
         for( double x = 20; x > 5*4; x --){
             System.out.println("hola 2");
         }
-        
-    `;
+
+        if ( true ) {
+            System.out.println("hola 3");
+        }else {
+            System.out.println("hola 4");
+        }
+
+    */
     // Analisis Lexico y Sintactico
     // Recordar el As utilizado en Visual Basic: hola as Integer
     let ast = Gramatica.parse(codigo) as AST;
