@@ -65,6 +65,6 @@ export class DoWhile extends Instruccion {
     }
     
     getNombreHijo(): String {
-        return "WHILE";
+        return "DO_WHILE";
     }
 }

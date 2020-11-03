@@ -3,9 +3,9 @@ import { TypeOperation } from "../Tipo";
 import { ValorGrafo } from "../grafo/ValorGrafo";
 
 export class OperacionRelacional extends Instruccion {
-    operador1:Instruccion;
-    operador2:Instruccion;
-    tipoOperacion:TypeOperation;
+    operador1: Instruccion;
+    operador2: Instruccion;
+    tipoOperacion: TypeOperation;
     /**
      * @class La expresion OperacionRelacional, realiza la operacion Relacional dependiendo del tipo que le sea asigando
      * @param line linea de la expresion
@@ -14,44 +14,56 @@ export class OperacionRelacional extends Instruccion {
      * @param operador2 operador derecho
      * @param tipoOperacion tipo de operacion de la expresion Relacional
      */
-    constructor(tipoOperacion:TypeOperation, operador1:Instruccion, operador2:Instruccion, line:Number, column:Number){
-        super(line,column)
+    constructor(tipoOperacion: TypeOperation, operador1: Instruccion, operador2: Instruccion, line: Number, column: Number) {
+        super(line, column)
         this.operador1 = operador1;
         this.operador2 = operador2;
         this.tipoOperacion = tipoOperacion;
     }
 
     translate() {
-        switch(this.tipoOperacion){
+        switch (this.tipoOperacion) {
             case TypeOperation.MAYOR:
-                return this.operador1.translate()+" > "+ this.operador2.translate();
+                return this.operador1.translate() + " > " + this.operador2.translate();
             case TypeOperation.MENOR:
-                return this.operador1.translate()+" < "+ this.operador2.translate();
+                return this.operador1.translate() + " < " + this.operador2.translate();
+            case TypeOperation.MAYOR_IGUAL:
+                return this.operador1.translate() + " >= " + this.operador2.translate();
+            case TypeOperation.MENOR_IGUAL:
+                return this.operador1.translate() + " <= " + this.operador2.translate();
+            case TypeOperation.IGUAL_IGUAL:
+                return this.operador1.translate() + " == " + this.operador2.translate();
+            case TypeOperation.DIFERENTE:
+                return this.operador1.translate() + " != " + this.operador2.translate();
         }
         return "";
     }
 
     generarGrafo(g: ValorGrafo, padre: String) {
         //Operador1
-        let nombreHijo = "nodo"+g.contador;
-        g.grafo += "  "+nombreHijo +"[label=\""+this.operador1.getNombreHijo() + "\"];\n";
-        g.grafo += "  "+padre +" -> "+ nombreHijo+";\n";
+        let nombreHijo = "nodo" + g.contador;
+        g.grafo += "  " + nombreHijo + "[label=\"" + this.operador1.getNombreHijo() + "\"];\n";
+        g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
         g.contador++;
-        this.operador1.generarGrafo(g,nombreHijo);
-        
+        this.operador1.generarGrafo(g, nombreHijo);
+
         //Operador2
-        nombreHijo = "nodo"+g.contador;
-        g.grafo += "  "+nombreHijo +"[label=\""+this.operador2.getNombreHijo() + "\"];\n";
-        g.grafo += "  "+padre +" -> "+ nombreHijo+";\n";
+        nombreHijo = "nodo" + g.contador;
+        g.grafo += "  " + nombreHijo + "[label=\"" + this.operador2.getNombreHijo() + "\"];\n";
+        g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
         g.contador++;
-        this.operador2.generarGrafo(g,nombreHijo);
+        this.operador2.generarGrafo(g, nombreHijo);
         return null;
     }
     getNombreHijo(): String {
-        switch(this.tipoOperacion){
-            case TypeOperation.MAYOR:       {return "MAYOR";}
-            case TypeOperation.MENOR:       {return "MENOR_QUE";}
-            default:{ return "" }
+        switch (this.tipoOperacion) {
+            case TypeOperation.MAYOR: { return "MAYOR"; }
+            case TypeOperation.MENOR: { return "MENOR_QUE"; }
+            case TypeOperation.MAYOR_IGUAL: { return "MAYOR_IGUAL"; }
+            case TypeOperation.MENOR_IGUAL: { return "MENOR_IGUAL"; }
+            case TypeOperation.IGUAL_IGUAL: { return "IGUAL"; }
+            case TypeOperation.DIFERENTE: { return "DIFERENTE"; }
+            default: { return "" }
         }
     }
 }

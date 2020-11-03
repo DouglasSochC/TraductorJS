@@ -20,7 +20,7 @@ class For extends Instruccion_1.Instruccion {
         this.instrucciones = instrucciones;
     }
     translate() {
-        let cadena = "para(" + this.declaracion.translate().split("\n").join(" ") + this.condicion.translate() + "; " + this.acumulador + "){\n";
+        let cadena = "para(" + this.declaracion.translate().split("\n").join(" ") + this.condicion.translate() + "; " + this.acumulador.translate() + "){\n";
         for (const ins of this.instrucciones) {
             cadena += ins.translate();
         }
@@ -28,8 +28,15 @@ class For extends Instruccion_1.Instruccion {
     }
     generarGrafo(g, padre) {
         let p = padre;
-        //Condicion
+        //Declaracion        
         let nombreHijo = "nodo" + g.contador;
+        g.grafo += "  " + nombreHijo + "[label=\"" + this.declaracion.getNombreHijo() + "\"];\n";
+        g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
+        g.contador++;
+        this.declaracion.generarGrafo(g, nombreHijo);
+        padre = p;
+        //Condicion
+        nombreHijo = "nodo" + g.contador;
         g.grafo += "  " + nombreHijo + "[label=\"CONDICION\"];\n";
         g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
         g.contador++;
@@ -39,6 +46,13 @@ class For extends Instruccion_1.Instruccion {
         g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
         g.contador++;
         this.condicion.generarGrafo(g, nombreHijo);
+        padre = p;
+        //Acumulador        
+        nombreHijo = "nodo" + g.contador;
+        g.grafo += "  " + nombreHijo + "[label=\"" + this.acumulador.getNombreHijo() + "\"];\n";
+        g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
+        g.contador++;
+        this.acumulador.generarGrafo(g, nombreHijo);
         padre = p;
         //----------- LISTA DE INSTRUCCIONES -----------
         nombreHijo = "nodo" + g.contador;

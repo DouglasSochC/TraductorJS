@@ -11,7 +11,7 @@ class MetodoFuncion extends Instruccion_1.Instruccion {
      * @param parametros Son los parametros del metodo o funcion
      */
     constructor(nombre_funcion, parametros, linea, columna) {
-        super(linea, columna); //Nos permite almacenar la linea y la columna a la clase Instruccion.ts
+        super(linea, columna); //Nos permite almacenar la linea y la columna
         this.nombre_funcion = nombre_funcion;
         this.parametros = parametros;
     }
@@ -19,10 +19,10 @@ class MetodoFuncion extends Instruccion_1.Instruccion {
         let cadena = "function " + this.nombre_funcion.toString() + "(";
         for (let a = 0; a < this.parametros.length; a++) {
             if (a < this.parametros.length - 1) {
-                cadena += this.parametros[a] + ",";
+                cadena += this.parametros[a].translate() + ",";
             }
             else {
-                cadena += this.parametros[a];
+                cadena += this.parametros[a].translate();
             }
         }
         return cadena + "){\n \n}\n";
@@ -33,12 +33,15 @@ class MetodoFuncion extends Instruccion_1.Instruccion {
         g.grafo += "  " + nombreHijo + "[label=\" Id: " + this.nombre_funcion + "\"];\n";
         g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
         g.contador++;
-        //----------- LISTA DE INSTRUCCIONES -----------
-        nombreHijo = "nodo" + g.contador;
-        g.grafo += "  " + nombreHijo + "[label=\"PARAMETROS\"];\n";
-        g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
-        g.contador++;
-        padre = nombreHijo;
+        //----------- LISTA DE PARAMETROS -----------
+        for (let x = 0; x < this.parametros.length; x++) {
+            let inst = this.parametros[x];
+            nombreHijo = "nodo" + g.contador;
+            g.grafo += "  " + nombreHijo + "[label=\"" + inst.getNombreHijo() + "\"];\n";
+            g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
+            g.contador++;
+            inst.generarGrafo(g, nombreHijo);
+        }
         return null;
     }
     getNombreHijo() {

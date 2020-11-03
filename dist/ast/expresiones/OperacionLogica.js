@@ -24,6 +24,8 @@ class OperacionLogica extends Instruccion_1.Instruccion {
                 return this.operador1.translate() + " and " + this.operador2.translate();
             case Tipo_1.TypeOperation.OR:
                 return this.operador1.translate() + " or " + this.operador2.translate();
+            case Tipo_1.TypeOperation.XOR:
+                return this.operador1.translate() + " xor " + this.operador2.translate();
             case Tipo_1.TypeOperation.NOT:
                 return " not " + this.operador1.translate();
         }
@@ -53,6 +55,9 @@ class OperacionLogica extends Instruccion_1.Instruccion {
             }
             case Tipo_1.TypeOperation.OR: {
                 return "OR";
+            }
+            case Tipo_1.TypeOperation.XOR: {
+                return "XOR";
             }
             default: {
                 return "NOT";

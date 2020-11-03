@@ -1,26 +1,28 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.While = void 0;
+exports.DoWhile = void 0;
 const Instruccion_1 = require("../Instruccion");
-class While extends Instruccion_1.Instruccion {
+class DoWhile extends Instruccion_1.Instruccion {
     /**
-     * @class La instruccion While realiza n iteraciones, dependiendo de la condicion
-     * @param line linea de la instruccion while
-     * @param column columna de la instruccion while
+     * @class La instruccion DoWhile realiza una iteracion y luego
+     * verifica su condicion
+     * @param linea linea de la instruccion while
+     * @param columna columna de la instruccion while
      * @param condicion condicion del ciclo
-     * @param instrucciones lista de sentencias o instrucciones dentro del while
+     * @param bloque_sentencias lista de sentencias o instrucciones dentro del DoWhile
      */
-    constructor(condicion, instrucciones, line, column) {
-        super(line, column);
+    constructor(condicion, bloque_sentencias, linea, columna) {
+        super(linea, columna);
         this.condicion = condicion;
-        this.instrucciones = instrucciones;
+        this.bloque_sentencias = bloque_sentencias;
     }
     translate() {
-        let cadena = "mientras(" + this.condicion.translate() + "){\n";
-        for (const ins of this.instrucciones) {
+        let cadena = "do {\n";
+        for (const ins of this.bloque_sentencias) {
             cadena += ins.translate();
         }
-        return cadena + "\n}\n";
+        cadena += "} while (" + this.condicion.translate() + ");\n\n";
+        return cadena;
     }
     generarGrafo(g, padre) {
         let p = padre;
@@ -42,8 +44,8 @@ class While extends Instruccion_1.Instruccion {
         g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
         g.contador++;
         padre = nombreHijo;
-        for (let x = 0; x < this.instrucciones.length; x++) {
-            let inst = this.instrucciones[x];
+        for (let x = 0; x < this.bloque_sentencias.length; x++) {
+            let inst = this.bloque_sentencias[x];
             nombreHijo = "nodo" + g.contador;
             g.grafo += "  " + nombreHijo + "[label=\"" + inst.getNombreHijo() + "\"];\n";
             g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
@@ -54,8 +56,8 @@ class While extends Instruccion_1.Instruccion {
         return null;
     }
     getNombreHijo() {
-        return "WHILE";
+        return "DO_WHILE";
     }
 }
-exports.While = While;
+exports.DoWhile = DoWhile;
 //# sourceMappingURL=DoWhile.js.map

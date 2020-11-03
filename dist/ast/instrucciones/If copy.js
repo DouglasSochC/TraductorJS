@@ -1,10 +1,8 @@
-import { Instruccion } from "../Instruccion"
-import { ValorGrafo } from "../grafo/ValorGrafo";
-
-export class If_Else extends Instruccion {
-    
-    condicion:Instruccion;
-    instrucciones: Array<Instruccion>;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.If = void 0;
+const Instruccion_1 = require("../Instruccion");
+class If extends Instruccion_1.Instruccion {
     /**
      * @class La instruccion While realiza n iteraciones, dependiendo de la condicion
      * @param line linea de la instruccion while
@@ -12,26 +10,24 @@ export class If_Else extends Instruccion {
      * @param condicion condicion del ciclo
      * @param instrucciones lista de sentencias o instrucciones dentro del while
      */
-    constructor(instrucciones: Array<Instruccion>, instrucciones2: Array<Instruccion>, line:Number, column:Number){
-        super(line,column);
-        console.log("tamanio de las instrucciones: "+instrucciones.length)
+    constructor(instrucciones, instrucciones2, line, column) {
+        super(line, column);
+        console.log("tamanio de las instrucciones: " + instrucciones.length);
         /*for (const ins of this.instrucciones) {
             console.log("instrucciones: "+ins);
         }*/
-        console.log("instrucciones2: "+instrucciones2.length);
+        console.log("instrucciones2: " + instrucciones2.length);
         this.instrucciones = instrucciones2;
     }
-
     translate() {
         let cadena = "";
         for (const ins of this.instrucciones) {
             //cadena += ins.translate();
-            console.log("iterando: "+ins);
+            console.log("iterando: " + ins);
         }
-        return cadena+"\n}\n";
+        return cadena + "\n}\n";
     }
-
-    generarGrafo(g: ValorGrafo, padre: String) {
+    generarGrafo(g, padre) {
         /*let p= padre;
         //Condicion
         let nombreHijo = "nodo"+g.contador;
@@ -66,8 +62,9 @@ export class If_Else extends Instruccion {
         //----------------------------------------------
         return null;
     }
-    
-    getNombreHijo(): String {
+    getNombreHijo() {
         return "IF";
     }
 }
+exports.If = If;
+//# sourceMappingURL=If copy.js.map

@@ -20,10 +20,10 @@ class MetodoFuncionSentencia extends Instruccion_1.Instruccion {
         let cadena = "function " + this.nombre_funcion.toString() + "(";
         for (let a = 0; a < this.parametros.length; a++) {
             if (a < this.parametros.length - 1) {
-                cadena += this.parametros[a] + ",";
+                cadena += this.parametros[a].translate() + ",";
             }
             else {
-                cadena += this.parametros[a] + "){\n\n";
+                cadena += this.parametros[a].translate() + "){\n\n";
             }
         }
         for (const ins of this.instrucciones) {
@@ -37,9 +37,18 @@ class MetodoFuncionSentencia extends Instruccion_1.Instruccion {
         g.grafo += "  " + nombreHijo + "[label=\" Id: " + this.nombre_funcion + "\"];\n";
         g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
         g.contador++;
+        //----------- LISTA DE PARAMETROS -----------
+        for (let x = 0; x < this.parametros.length; x++) {
+            let inst = this.parametros[x];
+            nombreHijo = "nodo" + g.contador;
+            g.grafo += "  " + nombreHijo + "[label=\"" + inst.getNombreHijo() + "\"];\n";
+            g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
+            g.contador++;
+            inst.generarGrafo(g, nombreHijo);
+        }
         //----------- LISTA DE INSTRUCCIONES -----------
         nombreHijo = "nodo" + g.contador;
-        g.grafo += "  " + nombreHijo + "[label=\"PARAMETROS\"];\n";
+        g.grafo += "  " + nombreHijo + "[label=\"INSTRUCCIONES\"];\n";
         g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
         g.contador++;
         padre = nombreHijo;
@@ -54,7 +63,7 @@ class MetodoFuncionSentencia extends Instruccion_1.Instruccion {
         return null;
     }
     getNombreHijo() {
-        return "METODO_FUNCION_SENTENCIA";
+        return "METODO_FUNCION";
     }
 }
 exports.MetodoFuncionSentencia = MetodoFuncionSentencia;

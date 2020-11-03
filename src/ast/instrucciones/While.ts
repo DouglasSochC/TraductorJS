@@ -18,7 +18,7 @@ export class While extends Instruccion {
     }
 
     translate() {
-        let cadena = "mientras("+this.condicion.translate()+"){\n";
+        let cadena = "while("+this.condicion.translate()+"){\n";
         for (const ins of this.instrucciones) {
             cadena += ins.translate();
         }

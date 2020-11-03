@@ -3,10 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TypeOperation = exports.Type = void 0;
 var Type;
 (function (Type) {
-    Type[Type["NUMERIC"] = 0] = "NUMERIC";
-    Type[Type["STRING"] = 1] = "STRING";
-    Type[Type["BOOLEAN"] = 2] = "BOOLEAN";
-    Type[Type["VOID"] = 3] = "VOID";
+    Type[Type["INT"] = 0] = "INT";
+    Type[Type["BOOLEAN"] = 1] = "BOOLEAN";
+    Type[Type["DOUBLE"] = 2] = "DOUBLE";
+    Type[Type["STRING"] = 3] = "STRING";
+    Type[Type["CHAR"] = 4] = "CHAR";
+    Type[Type["VOID"] = 5] = "VOID";
 })(Type = exports.Type || (exports.Type = {}));
 var TypeOperation;
 (function (TypeOperation) {
@@ -17,10 +19,15 @@ var TypeOperation;
     TypeOperation[TypeOperation["MENOSUNARIO"] = 4] = "MENOSUNARIO";
     TypeOperation[TypeOperation["MAYOR"] = 5] = "MAYOR";
     TypeOperation[TypeOperation["MENOR"] = 6] = "MENOR";
-    TypeOperation[TypeOperation["OR"] = 7] = "OR";
-    TypeOperation[TypeOperation["AND"] = 8] = "AND";
-    TypeOperation[TypeOperation["NOT"] = 9] = "NOT";
-    TypeOperation[TypeOperation["INCREMENTO"] = 10] = "INCREMENTO";
-    TypeOperation[TypeOperation["DECREMENTO"] = 11] = "DECREMENTO";
+    TypeOperation[TypeOperation["MAYOR_IGUAL"] = 7] = "MAYOR_IGUAL";
+    TypeOperation[TypeOperation["MENOR_IGUAL"] = 8] = "MENOR_IGUAL";
+    TypeOperation[TypeOperation["IGUAL_IGUAL"] = 9] = "IGUAL_IGUAL";
+    TypeOperation[TypeOperation["DIFERENTE"] = 10] = "DIFERENTE";
+    TypeOperation[TypeOperation["OR"] = 11] = "OR";
+    TypeOperation[TypeOperation["AND"] = 12] = "AND";
+    TypeOperation[TypeOperation["NOT"] = 13] = "NOT";
+    TypeOperation[TypeOperation["XOR"] = 14] = "XOR";
+    TypeOperation[TypeOperation["INCREMENTO"] = 15] = "INCREMENTO";
+    TypeOperation[TypeOperation["DECREMENTO"] = 16] = "DECREMENTO";
 })(TypeOperation = exports.TypeOperation || (exports.TypeOperation = {}));
 //# sourceMappingURL=Tipo.js.map

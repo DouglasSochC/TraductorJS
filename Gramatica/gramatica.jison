@@ -1,14 +1,20 @@
 %{
 	const { Instruccion } = require("../dist/ast/Instruccion");
 	const { AST } = require("../dist/ast/AST");
+	const { FMain } = require("../dist/ast/instrucciones/FMain");
 	const { Clase } = require("../dist/ast/instrucciones/Clase");
 	const { MetodoFuncion } = require("../dist/ast/instrucciones/MetodoFuncion");
 	const { MetodoFuncionSentencia } = require("../dist/ast/instrucciones/MetodoFuncionSentencia");
 	const { Parametro } = require("../dist/ast/instrucciones/Parametro");
-	const { Asignacion } = require("../dist/ast/instrucciones/Asignacion");
+	const { Return } = require("../dist/ast/instrucciones/Return");
+	const { Asignacion } = require("../dist/ast/instrucciones/Asignacion");	
 	const { Declaracion } = require("../dist/ast/instrucciones/Declaracion");
+	const { Comentario } = require("../dist/ast/instrucciones/Comentario");
+	const { Break_Continue } = require("../dist/ast/instrucciones/Break_Continue");
 	const { Print } = require("../dist/ast/instrucciones/Print");
 	const { If } = require("../dist/ast/instrucciones/If");
+	const { If_Iterativo } = require("../dist/ast/instrucciones/If_Iterativo");
+	const { Else } = require("../dist/ast/instrucciones/Else");
 	const { DoWhile } = require("../dist/ast/instrucciones/DoWhile");
 	const { While } = require("../dist/ast/instrucciones/While");
 	const { For } = require("../dist/ast/instrucciones/For");
@@ -30,10 +36,12 @@
 
 %%
 \s+					//ignorando los espacios en blanco
-"//".*				/* ignora comentario de una sola linea */
-[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]		/* ignora comentarios Multilinea*/
+"//".*				return 'comentariou' /* ignora comentario de una sola linea */
+[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]	 return 'comentariom'	/* ignora comentarios Multilinea*/
 
 "public"			return 'public_';
+"static"			return 'static_';
+"main"				return 'main_';
 "class"				return 'class_';
 "interface"			return 'interface_';
 "void"				return 'void_';
@@ -42,6 +50,10 @@
 "char"				return 'char_';
 "String"			return 'string_';
 "boolean"			return 'boolean_';
+"break"				return 'break_';
+"continue"			return 'continue_';
+"return"			return 'return_';
+
 
 "System.out.println" return 'print_';
 "do"				return 'do_';
@@ -62,6 +74,8 @@
 "/"					return 'division';
 "("					return 'parAbre';
 ")"					return 'parCierra';
+"["					return 'corAbre';
+"]"					return 'corCierra';
 
 "<"					return 'menorQ';
 ">"					return 'mayorQ';
@@ -69,6 +83,7 @@
 "&&"				return 'and_';
 "||"				return 'or_';
 "!"					return 'not_';
+"^"					return 'xor_';
 
 "true"				return 'true_';
 "false"				return 'false_';
@@ -94,6 +109,7 @@
 
 %left 'mas' 'menos'
 %left 'por' 'division'
+%left 'xor_'
 
 %left uMenos
 %right 'not_'
@@ -113,8 +129,8 @@ INSTRUCCIONES :
 	| INSTRUCCION 				{$$ = [$1];}
 	;
 
-INSTRUCCION : 
-	  DECLARACION 		{ $$ = $1; }
+INSTRUCCION : MAIN 		{ $$ = $1; }
+	| DECLARACION 		{ $$ = $1; }
 	| CLASE				{ $$ = $1; }
 	| METODO_FUNCION	{ $$ = $1; }
 	| ASIGNACION		{ $$ = $1; }
@@ -122,37 +138,19 @@ INSTRUCCION :
 	| DO_WHILE			{ $$ = $1; }
 	| WHILE				{ $$ = $1; }
 	| FOR				{ $$ = $1; }
+	| INCREMENTODECREMENTO pcoma	{ $$ = $1; }
 	| PRINT				{ $$ = $1; }
 	;
+	//| COMENTARIO		{ $$ = $1; }
 
-IF: if_ CONDICION BLOQUE_SENTENCIAS { $$ = new If($2, $3, null, this._$.first_line, this._$.first_column); }
-	| if_ CONDICION BLOQUE_SENTENCIAS else_ BLOQUE_SENTENCIAS { $$ = new If($2, $3, $5, this._$.first_line, this._$.first_column); }
+MAIN: public_ static_ void_ main_ parAbre string_ corAbre corCierra EXPRESION parCierra BS_GENERAL { $$ = new FMain($11, null, this._$.first_line, this._$.first_column); }
 	;
 
-ELSE : ELSE ELSE_R  { $1.push($2); $$ = $1; }
-	| ELSE_R { $$ = [$1]; }
-	;
-
-ELSE_R: else_ if_ CONDICION BLOQUE_SENTENCIAS { $$ = $3+$4; }
-	| else_ BLOQUE_SENTENCIAS { $$ = $2; }
-	;
-
-DO_WHILE: do_ BLOQUE_SENTENCIAS while_ CONDICION pcoma { $$ = new DoWhile($4, $2, this._$.first_line, this._$.first_column); }
-	;
-
-FOR : for_ parAbre DECLARACION EXPRESION pcoma INCREMENTODECREMENTO parCierra BLOQUE_SENTENCIAS { $$ = new For($3, $4, $6, $8, this._$.first_line, this._$.first_column); }
-	;
-
-DECLARACION : TIPO identificador igual EXPRESION pcoma { $$ = new Declaracion($1, $2, $4, this._$.first_line, this._$.first_column); }
-	| TIPO identificador igual EXPRESION coma { $$ = new Declaracion($1, $2, $4, this._$.first_line, this._$.first_column); }
-	;
-
-INCREMENTODECREMENTO: identificador mas mas { $$ = new Adicion_Sustraccion($1, $2, $3, this._$.first_line, this._$.first_column); }
-	| identificador menos menos { $$ = new Adicion_Sustraccion($1, $2, $3, this._$.first_line, this._$.first_column); }
+CLASE : public_ class_ identificador BS_GENERAL { $$ = new Clase($3, $4, this._$.first_line, this._$.first_column); }
 	;
 
 METODO_FUNCION: public_ TIPO_RETORNO identificador parAbre V_PARAMETROS parCierra pcoma { $$ = new MetodoFuncion($3, $5, this._$.first_line, this._$.first_column); }
-	| public_ TIPO_RETORNO identificador parAbre V_PARAMETROS parCierra BLOQUE_SENTENCIAS { $$ = new MetodoFuncionSentencia($3, $5, $7, this._$.first_line, this._$.first_column); }
+	| public_ TIPO_RETORNO identificador parAbre V_PARAMETROS parCierra BS_RETORNO { $$ = new MetodoFuncionSentencia($3, $5, $7, this._$.first_line, this._$.first_column); }
 	;
 
 TIPO_RETORNO: void_ { $$ = $1; }
@@ -174,19 +172,69 @@ TIPO : int_ 	{ $$ = Type.INT; }
 	| boolean_	{ $$ = Type.BOOLEAN; }
 	;
 
+//Bloque de Sentencias - Funciones y Metodos
+BS_RETORNO: llaveAbre INSTRUCCIONES llaveCierra { $$ = $2; }
+	| llaveAbre INSTRUCCIONES RETURN llaveCierra { $$ = $2.concat($3); }
+	;
+
+RETURN: return_ EXPRESION pcoma { $$ = new Return($2, this._$.first_line, this._$.first_column); }
+	;
+
 ASIGNACION : identificador igual EXPRESION pcoma { $$ = new Asignacion($1, $3, this._$.first_line, this._$.first_column); }
 	;
-
-CLASE : public_ class_ identificador BLOQUE_SENTENCIAS { $$ = new Clase($3, $4, this._$.first_line, this._$.first_column); }
+/**Esto se quedo en analisis*/
+DECLARACION : TIPO identificador igual EXPRESION pcoma { $$ = new Declaracion($1, $2, $4, this._$.first_line, this._$.first_column); }
+	| TIPO identificador igual EXPRESION coma { $$ = new Declaracion($1, $2, $4, this._$.first_line, this._$.first_column); }
+	| identificador { $$ = new Declaracion($1, $2, $4, this._$.first_line, this._$.first_column); }
+	| identificador coma { $$ = new Declaracion($1, $2, $4, this._$.first_line, this._$.first_column); }
 	;
 
-WHILE : while_ CONDICION BLOQUE_SENTENCIAS { $$ = new While($2, $3, this._$.first_line, this._$.first_column); }
+COMENTARIO : comentariom { $$ = new Comentario($1, this._$.first_line, this._$.first_column); }
+	| comentariou { $$ = new Comentario($1,this._$.first_line, this._$.first_column); }
 	;
 
-CONDICION : parAbre EXPRESION parCierra { $$ = $2; }
+FOR : for_ parAbre DECLARACION EXPRESION pcoma INCREMENTODECREMENTO parCierra BS_CICLO { $$ = new For($3, $4, $6, $8, this._$.first_line, this._$.first_column); }
 	;
 
-BLOQUE_SENTENCIAS : llaveAbre INSTRUCCIONES llaveCierra { $$ = $2; }
+DO_WHILE: do_ BS_CICLO while_ CONDICION pcoma { $$ = new DoWhile($4, $2, this._$.first_line, this._$.first_column); }
+	;
+
+WHILE : while_ CONDICION BS_CICLO { $$ = new While($2, $3, this._$.first_line, this._$.first_column); }
+	;
+
+//Bloque de Sentencias - Ciclos
+BS_CICLO: llaveAbre INSTRUCCIONES llaveCierra { $$ = $2; }
+	| llaveAbre INSTRUCCIONES BREAK_CONTINUE llaveCierra { $$ = $2.concat($3); }
+	;
+
+BREAK_CONTINUE: break_ pcoma { $$ = new Break_Continue($1, this._$.first_line, this._$.first_column); }
+	| continue_ pcoma { $$ = new Break_Continue($1, this._$.first_line, this._$.first_column); }
+	;
+
+
+INCREMENTODECREMENTO: identificador mas mas { $$ = new Adicion_Sustraccion($1, $2, $3, this._$.first_line, this._$.first_column); }
+	| identificador menos menos { $$ = new Adicion_Sustraccion($1, $2, $3, this._$.first_line, this._$.first_column); }
+	;
+
+IF: if_ CONDICION BS_GENERAL { $$ = new If($2, $3, null, this._$.first_line, this._$.first_column); }
+	| if_ CONDICION BS_GENERAL else_ ELSE { $$ = new If($2, $3, $5, this._$.first_line, this._$.first_column); }
+	| if_ CONDICION BS_GENERAL else_ IF { $$ = new If_Iterativo($2, $3, $5, this._$.first_line, this._$.first_column); }	
+	| if_ CONDICION llaveAbre llaveCierra else_ llaveAbre llaveCierra  { $$ = new If($2, null, null, this._$.first_line, this._$.first_column); }
+	;
+
+ELSE: BS_GENERAL { $$ = new Else($1, this._$.first_line, this._$.first_column); }
+	| llaveAbre llaveCierra { $$ = null; }
+	;
+
+CONDICION : parAbre EXPRESION mayorQ igual EXPRESION parCierra	{ $$ = new OperacionRelacional( TypeOperation.MAYOR_IGUAL, $2, $5, this._$.first_line, this._$.first_column); }
+	| parAbre EXPRESION menorQ igual EXPRESION parCierra	{ $$ = new OperacionRelacional( TypeOperation.MENOR_IGUAL, $2, $5, this._$.first_line, this._$.first_column); }
+	| parAbre EXPRESION igual igual EXPRESION parCierra	{ $$ = new OperacionRelacional( TypeOperation.IGUAL_IGUAL, $2, $5, this._$.first_line, this._$.first_column); }
+	| parAbre EXPRESION not_ igual EXPRESION parCierra	{ $$ = new OperacionRelacional( TypeOperation.DIFERENTE, $2, $5, this._$.first_line, this._$.first_column); }
+	| parAbre EXPRESION parCierra { $$ = $2; }
+	;
+
+//Bloque de Sentencias - General
+BS_GENERAL : llaveAbre INSTRUCCIONES llaveCierra { $$ = $2; }
 	;
 
 PRINT : print_ CONDICION pcoma { $$ = new Print( $2, this._$.first_line, this._$.first_column); }
@@ -199,13 +247,14 @@ EXPRESION :
 	| EXPRESION por EXPRESION		{ $$ = new OperacionAritmetica( TypeOperation.MULTIPLICACION, $1, $3, this._$.first_line, this._$.first_column); }
 	| EXPRESION division EXPRESION	{ $$ = new OperacionAritmetica( TypeOperation.DIVISION, $1, $3, this._$.first_line, this._$.first_column); }	
 	// Relacionales
-	| EXPRESION mayorQ EXPRESION	{ $$ = new OperacionRelacional( TypeOperation.MAYOR, $1, $3, this._$.first_line, this._$.first_column); }
-	| EXPRESION menorQ EXPRESION	{ $$ = new OperacionRelacional( TypeOperation.MENOR, $1, $3, this._$.first_line, this._$.first_column); }
+	| EXPRESION mayorQ EXPRESION		{ $$ = new OperacionRelacional( TypeOperation.MAYOR, $1, $3, this._$.first_line, this._$.first_column); }
+	| EXPRESION menorQ EXPRESION		{ $$ = new OperacionRelacional( TypeOperation.MENOR, $1, $3, this._$.first_line, this._$.first_column); }	
 	// Logicas
 	| EXPRESION or_ EXPRESION		{ $$ = new OperacionLogica( TypeOperation.OR, $1, $3, this._$.first_line, this._$.first_column); }
 	| EXPRESION and_ EXPRESION		{ $$ = new OperacionLogica( TypeOperation.AND, $1, $3, this._$.first_line, this._$.first_column); }
+	| EXPRESION xor_ EXPRESION		{ $$ = new OperacionLogica( TypeOperation.XOR, $1, $3, this._$.first_line, this._$.first_column); }
 	| not_ EXPRESION				{ $$ = new OperacionLogica( TypeOperation.NOT, $2, null, this._$.first_line, this._$.first_column); }
-	| menos EXP %prec uMenos		{ $$ = new OperacionAritmetica( TypeOperation.MENOSUNARIO, $2, null, this._$.first_line, this._$.first_column); }
+	| menos EXPRESION %prec uMenos		{ $$ = new OperacionAritmetica( TypeOperation.MENOSUNARIO, $2, null, this._$.first_line, this._$.first_column); }
 	| parAbre EXPRESION parCierra	{ $$ = $2; }
 	| PRIMITIVO						{ $$ = $1; }
 	;

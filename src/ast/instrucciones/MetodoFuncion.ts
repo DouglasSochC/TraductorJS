@@ -14,7 +14,7 @@ export class MetodoFuncion extends Instruccion {
      * @param parametros Son los parametros del metodo o funcion
      */
     constructor(nombre_funcion:String, parametros: Array<Instruccion>, linea:Number, columna:Number){
-        super(linea,columna) //Nos permite almacenar la linea y la columna a la clase Instruccion.ts
+        super(linea,columna) //Nos permite almacenar la linea y la columna
         this.nombre_funcion = nombre_funcion;
         this.parametros = parametros;
     }
@@ -37,13 +37,8 @@ export class MetodoFuncion extends Instruccion {
         g.grafo += "  "+nombreHijo +"[label=\" Id: "+this.nombre_funcion+"\"];\n";
         g.grafo += "  "+padre +" -> "+ nombreHijo+";\n";
         g.contador++;
-        
-        //----------- LISTA DE INSTRUCCIONES -----------
-        /*nombreHijo = "nodo"+g.contador;
-        g.grafo += "  "+nombreHijo +"[label=\"INSTRUCCIONES\"];\n";
-        g.grafo += "  "+padre +" -> "+ nombreHijo+";\n";
-        g.contador++;
-        padre = nombreHijo;*/
+
+        //----------- LISTA DE PARAMETROS -----------
         for (let x = 0; x < this.parametros.length; x++) {
             let inst = this.parametros[x];
             nombreHijo = "nodo"+g.contador;

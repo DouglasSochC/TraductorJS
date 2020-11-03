@@ -24,6 +24,14 @@ class OperacionRelacional extends Instruccion_1.Instruccion {
                 return this.operador1.translate() + " > " + this.operador2.translate();
             case Tipo_1.TypeOperation.MENOR:
                 return this.operador1.translate() + " < " + this.operador2.translate();
+            case Tipo_1.TypeOperation.MAYOR_IGUAL:
+                return this.operador1.translate() + " >= " + this.operador2.translate();
+            case Tipo_1.TypeOperation.MENOR_IGUAL:
+                return this.operador1.translate() + " <= " + this.operador2.translate();
+            case Tipo_1.TypeOperation.IGUAL_IGUAL:
+                return this.operador1.translate() + " == " + this.operador2.translate();
+            case Tipo_1.TypeOperation.DIFERENTE:
+                return this.operador1.translate() + " != " + this.operador2.translate();
         }
         return "";
     }
@@ -49,6 +57,18 @@ class OperacionRelacional extends Instruccion_1.Instruccion {
             }
             case Tipo_1.TypeOperation.MENOR: {
                 return "MENOR_QUE";
+            }
+            case Tipo_1.TypeOperation.MAYOR_IGUAL: {
+                return "MAYOR_IGUAL";
+            }
+            case Tipo_1.TypeOperation.MENOR_IGUAL: {
+                return "MENOR_IGUAL";
+            }
+            case Tipo_1.TypeOperation.IGUAL_IGUAL: {
+                return "IGUAL";
+            }
+            case Tipo_1.TypeOperation.DIFERENTE: {
+                return "DIFERENTE";
             }
             default: {
                 return "";

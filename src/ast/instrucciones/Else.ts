@@ -2,10 +2,8 @@ import { Instruccion } from "../Instruccion"
 import { ValorGrafo } from "../grafo/ValorGrafo";
 
 export class Else extends Instruccion {
-    
-    condicion:Instruccion;
-    instrucciones_if: Array<Instruccion>;
-    instrucciones_else: Array<Instruccion>;
+
+    instrucciones: Array<Instruccion>;
     /**
      * @class La instruccion While realiza n iteraciones, dependiendo de la condicion
      * @param line linea de la instruccion while
@@ -13,41 +11,23 @@ export class Else extends Instruccion {
      * @param condicion condicion del ciclo
      * @param instrucciones lista de sentencias o instrucciones dentro del while
      */
-    constructor(condicion:Instruccion, instrucciones_if: Array<Instruccion>, instrucciones_else: Array<Instruccion>, line:Number, column:Number){
-        super(line,column);
-        this.instrucciones_if = instrucciones_if;
-        this.instrucciones_else = instrucciones_else;
+    constructor(instrucciones: Array<Instruccion>, line: Number, column: Number) {
+        super(line, column);
+        this.instrucciones = instrucciones;
     }
 
     translate() {
-        let cadena = "";
-        for (const ins of this.instrucciones_if) {
-            //cadena += ins.translate();
-            console.log("iterando: "+ins);
+        let cadena = "} else {\n";
+        for (const ins of this.instrucciones) {
+            cadena += ins.translate();
         }
-        return cadena+"\n}\n";
+        return cadena + "}\n";
     }
 
     generarGrafo(g: ValorGrafo, padre: String) {
-        /*let p= padre;
-        //Condicion
-        let nombreHijo = "nodo"+g.contador;
-        g.grafo += "  "+nombreHijo +"[label=\"CONDICION\"];\n";
-        g.grafo += "  "+padre +" -> "+ nombreHijo+";\n";
-        g.contador++;
-        padre = nombreHijo;
-        
-        nombreHijo = "nodo"+g.contador;
-        g.grafo += "  "+nombreHijo +"[label=\""+this.condicion.getNombreHijo()+"\"];\n";
-        g.grafo += "  "+padre +" -> "+ nombreHijo+";\n";
-        g.contador++;
-        this.condicion.generarGrafo(g,nombreHijo);
-        
-        
-        padre = p;
         
         //----------- LISTA DE INSTRUCCIONES -----------
-        nombreHijo = "nodo"+g.contador;
+        let nombreHijo = "nodo"+g.contador;
         g.grafo += "  "+nombreHijo +"[label=\"INSTRUCCIONES\"];\n";
         g.grafo += "  "+padre +" -> "+ nombreHijo+";\n";
         g.contador++;
@@ -59,12 +39,11 @@ export class Else extends Instruccion {
             g.grafo += "  "+padre +" -> "+ nombreHijo+";\n";
             g.contador++;
             inst.generarGrafo(g,nombreHijo);
-        }*/
-        //----------------------------------------------
+        }
         return null;
     }
-    
+
     getNombreHijo(): String {
-        return "IF";
+        return "ELSE";
     }
 }

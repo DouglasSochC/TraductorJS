@@ -7,32 +7,61 @@ export function AnalizarJava(entrada:string):String{
     //Nota: Cuando no funciona algun funcionamiento de los nodos, hay que tomar en cuenta
     //si en realidad la funcion que tratamos de traducir tiene hijos
     let codigo = `
-        int hola=1, int hola2 =3, boolean prueba = "hola a todos";
-        public int suma(int x, int y, int z);
-       
-        public void suma(int x, int y){
-            int numero = 2;
-            String cadena = "Hola";
-            boolean flag = true; 
-            int a = 0.0;
-        }
+        
+        public static void main(String[] args) {
+            
+            public int suma(int x, int y, int z);
+        
+            public int suma(int x, int y){
+                int numero = 2;
+                String cadena = "Hola";
+                boolean flag = true; 
+                int a = 0;
 
-        for(int i=1.0; i<10+4; i--){
-            System.out.println("hola");
-        }
+                return "hola";
+            }
+            
+            for(int i=1.0; i<10+4; i++){
+                System.out.println(a);
+                continue;
+            }
 
+            if (a != d) {
+                System.out.println("hola 3");
+            }else if (false) {
+                hola++;
+                int hola = 0;
+                String nombre = "Douglas";
+            }else if(true) {
+                int hola = -12535.25;
+            }else {
+                String mensaje = "hola a todos";
+            }
+        }
     `;
 
     /*
-    
-        int hola=1, int hola2 =3, boolean prueba = "hola a todos";
-        public int suma(int x, int y, int z);
-       
-        public void suma(int x, int y){
-            int numero = 2;
-            String cadena = "Hola";
-            boolean flag = true; 
-            numeric a = 0.0;
+        for(int i=1.0; i<10+4; i--){
+            System.out.println(a++);
+        }
+
+        while(a > 2){ 
+            a = "hola"+":)"+59.5*12.2+(10.9*12.12-56.56/0.1);
+            System.out.println(a+b||c>d);
+            System.out.println(a);
+        }
+
+        public static void main(String[] hola) {
+            do{
+                System.out.println ("Contador" + (contador + 1) );
+                int numero = 2;
+                String cadena = "Hola";
+                boolean flag = true; 
+                continue;
+                int a = 0.0;
+                continue;
+            } while (contador<10);
+
         }
 
         do{
@@ -46,11 +75,7 @@ export function AnalizarJava(entrada:string):String{
             numeric a = 0.0;
         }
 
-        while(a > 2){ 
-            a = "hola"+":)"+59.5*12.2+(10.9*12.12-56.56/0.1);
-            System.out.println(a+b||c>d);
-            System.out.println(a);
-        }
+        
 
         for(int i=1.0; i<10; i++){
             System.out.println("hola");
@@ -60,11 +85,7 @@ export function AnalizarJava(entrada:string):String{
             System.out.println("hola 2");
         }
 
-        if ( true ) {
-            System.out.println("hola 3");
-        }else {
-            System.out.println("hola 4");
-        }
+        
 
     */
     // Analisis Lexico y Sintactico

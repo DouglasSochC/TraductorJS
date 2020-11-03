@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Declaracion = void 0;
 const Instruccion_1 = require("../Instruccion");
+const Tipo_1 = require("../Tipo");
 class Declaracion extends Instruccion_1.Instruccion {
     /**
      * @class La instruccion declaracion, inserta una nueva variable en la tabla de simbolos
@@ -25,24 +26,18 @@ class Declaracion extends Instruccion_1.Instruccion {
         let padreAux = padre; //Auxiar con nombre del padre
         //Tipo
         let nombreHijo = "nodo" + g.contador;
-        g.grafo += "  " + nombreHijo + "[label=\" Tipo: " + this.type.toString() + "\"];\n";
+        g.grafo += "  " + nombreHijo + "[label=\" Tipo: " + Tipo_1.Type[this.type] + "\"];\n";
         g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
         g.contador++;
-        // Id
+        // Titulo Id
         nombreHijo = "nodo" + g.contador;
         g.grafo += "  " + nombreHijo + "[label=\"ID\"];\n";
         g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
         g.contador++;
         let padreHijo = nombreHijo;
-        //Identificador
+        // Valor del Id
         nombreHijo = "nodo" + g.contador;
-        /*let losIds = ""
-        for(let i = 0; i<listaIds.length; i++){
-            losIds += listaIds[i]+",";
-        }
-        g.grafo += "  " + nombreHijo + "[label=\" Id: " + losIds + "\"];\n";
-        */
-        g.grafo += "  " + nombreHijo + "[label=\" Id: " + this.id + "\"];\n";
+        g.grafo += "  " + nombreHijo + "[label= \"" + this.id + "\"];\n";
         g.grafo += "  " + padreHijo + " -> " + nombreHijo + ";\n";
         g.contador++;
         if (this.valor != null) {
