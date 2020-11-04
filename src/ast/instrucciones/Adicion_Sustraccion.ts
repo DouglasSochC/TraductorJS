@@ -24,7 +24,7 @@ export class Adicion_Sustraccion extends Instruccion {
 
     translate() {
         // int a = 0;
-        return this.id.toString() + this.simbolouno.toString() + this.simbolodos.toString();
+        return this.id.toString() + this.simbolouno.toString() + this.simbolodos.toString()+";\n";
     }
     generarGrafo(g: ValorGrafo, padre: String) {
 

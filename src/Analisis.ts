@@ -2,90 +2,144 @@ import Gramatica = require('../Gramatica/gramatica');
 import { AST } from "./ast/AST";
 import { GrafoAST } from "./ast/grafo/GrafoAST";
 
-export function AnalizarJava(entrada:string):String{
+export function AnalizarJava(entrada: string): String {
 
     //Nota: Cuando no funciona algun funcionamiento de los nodos, hay que tomar en cuenta
     //si en realidad la funcion que tratamos de traducir tiene hijos
     let codigo = `
+    
+    public class Myclase {
+        String variable , variable1 , variable2;
+        int constante=100/5*5/5+3+2-1*0+1 + 2;
         
-        public static void main(String[] args) {
-            
-            public int suma(int x, int y, int z);
         
-            public int suma(int x, int y){
-                int numero = 2;
-                String cadena = "Hola";
-                boolean flag = true; 
-                int a = 0;
-
-                return "hola";
+        public void MyMetodo (int x  ){
+            metodo_llamada(x,"hola a todos",y,z,b,bs);
+            String nombre="myMetodo";
+            int x , y;
+            x=10;
+            y=11;
+            int variable=3+3-5/5*10;
+            System.out.println("myMetodo");
+            System.out.print(x);
+        }
+        
+        public void MyMetodo2(int x ){
+            int valor=x;
+            System.out.println(x);
+            for (int f; x<=f; f++){
+                System.out.println("HOla");
+                hola(x);
             }
             
-            for(int i=1.0; i<10+4; i++){
-                System.out.println(a);
-                continue;
+            //hola
+        }
+        
+        public void Contador(){
+            int contador = 0 ;
+            do{
+                System.out.println ("Contador" + (contador + 1) );
+                contador ++;
+            } while (contador<10);   
+            System.out.println(contador + "va aumentando");
+        }
+        public static void main(String [] args ){
+            System.out.println("ESTE ES EL MAIN");
+        } 
+        
+        public void testif(String valor){
+            int contador = valor ;
+            if (valor==10){
+            //imprime
+            for (int f; x<=f; f++){
+                System.out.println(f);
             }
-
-            if (a != d) {
-                System.out.println("hola 3");
-            }else if (false) {
-                hola++;
-                int hola = 0;
-                String nombre = "Douglas";
-            }else if(true) {
-                int hola = -12535.25;
-            }else {
-                String mensaje = "hola a todos";
+            } else if (valor>10){
+                System.out.println("x");
+            }else   {
+                System.out.println("x");
             }
         }
+      
+    }
+      
+    public interface MyInterface { 
+      
+    }
+    public class MyClase2 { 
+    
+    }
+    public class MyClase3 { 
+    
+    }
+      
     `;
 
     /*
-        for(int i=1.0; i<10+4; i--){
-            System.out.println(a++);
+        public class Myclase {
+        String variable , variable1 , variable2;
+        int constante=100/5*5/5+3+2-1*0+1 + 2;
+        
+        
+        public void MyMetodo (int x  ){
+            metodo_llamada(x);
+            String nombre="myMetodo";
+            int x , y;
+            x=10;
+            y=11;
+            int variable=3+3-5/5*10;
+            System.out.println("myMetodo");
+            System.out.print(x);
         }
-
-        while(a > 2){ 
-            a = "hola"+":)"+59.5*12.2+(10.9*12.12-56.56/0.1);
-            System.out.println(a+b||c>d);
-            System.out.println(a);
+        
+        public void MyMetodo2(int x ){
+            int valor=x;
+            System.out.println(x);
+            for (int f; x<=f; f++){
+                System.out.println("HOla");
+                hola(x);
+            }
+            
+            //hola
         }
-
-        public static void main(String[] hola) {
+        
+        public void Contador(){
+            int contador = 0 ;
             do{
-                System.out.println ("Contador" + (contador + 1) );
-                int numero = 2;
-                String cadena = "Hola";
-                boolean flag = true; 
-                continue;
-                int a = 0.0;
-                continue;
-            } while (contador<10);
-
-        }
-
-        do{
             System.out.println ("Contador" + (contador + 1) );
-        } while (contador<10);
-
-        public class holamundo {
-            int numero = 2;
-            String cadena = "Hola";
-            boolean flag = true; 
-            numeric a = 0.0;
+            contador ++;
+            } while (contador<10);   
+            System.out.println(contador + "va aumentando");
         }
-
+        public static void main(String [] args ){
+            System.out.println("ESTE ES EL MAIN");
+        } 
         
-
-        for(int i=1.0; i<10; i++){
-            System.out.println("hola");
+        public void testif(String valor){
+            int contador = valor ;
+            if (valor==10){
+            //imprime
+            for (int f; x<=f; f++){
+                System.out.println(f);
+            }
+            } else if (valor>10){
+            System.out.println("x");
+            }else   {
+            System.out.println("x");
+            }
         }
-
-        for( double x = 20; x > 5*4; x --){
-            System.out.println("hola 2");
-        }
-
-        
+      
+    }
+      
+    public interface MyInterface { 
+      
+    }
+    public class MyClase2 { 
+    
+    }
+    public class MyClase3 { 
+    
+    }
 
     */
     // Analisis Lexico y Sintactico
@@ -96,7 +150,7 @@ export function AnalizarJava(entrada:string):String{
     console.log("\n\n---------------- TRADUCCION ----------------\n");
     console.log(nuevoCodigo);
     console.log("\n--------------------------------------------\n");
-    
+
     //Inicia la generacion del grafo
     let grafoAST = new GrafoAST(ast);
     let txtDotAST = grafoAST.getGrafo()

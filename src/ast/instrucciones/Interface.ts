@@ -1,7 +1,7 @@
 import { Instruccion } from "../Instruccion"
 import { ValorGrafo } from "../grafo/ValorGrafo";
 
-export class Clase extends Instruccion {
+export class Interface extends Instruccion {
     nombre_clase: String;
     instrucciones: Array<Instruccion>;
     /**
@@ -19,14 +19,7 @@ export class Clase extends Instruccion {
     }
 
     translate() {
-        let cadena = "class " + this.nombre_clase.toString() + "{\n constructor(){\n }\n";
-        if (this.instrucciones != null) {
-            for (const ins of this.instrucciones) {
-                cadena += ins.translate();
-            }
-        }
-
-        return cadena + "\n}\n";
+        return "";
     }
     generarGrafo(g: ValorGrafo, padre: String) {
 
@@ -55,6 +48,6 @@ export class Clase extends Instruccion {
         return null;
     }
     getNombreHijo(): String {
-        return "CLASE";
+        return "INTERFACE";
     }
 }

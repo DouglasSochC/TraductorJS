@@ -24,7 +24,7 @@ export class For extends Instruccion {
     }
 
     translate() {
-        let cadena = "para("+this.declaracion.translate().split("\n").join(" ")+this.condicion.translate()+"; "+this.acumulador.translate()+"){\n";
+        let cadena = "for("+this.declaracion.translate().split("\n").join(" ")+this.condicion.translate()+"; "+this.acumulador.translate().split("\n").join("")+"){\n";
         for (const ins of this.instrucciones) {
             cadena += ins.translate();
         }

@@ -18,13 +18,12 @@ export class Comentario extends Instruccion {
     }
 
     translate() {
-        return this.comentario.toString();
+        return this.comentario.toString()+"\n";
     }
     generarGrafo(g: ValorGrafo, padre: String) {
-                
         return null;
     }
     getNombreHijo(): String {
-        return "CLASE";
+        return "COMENTARIO";
     }
 }
