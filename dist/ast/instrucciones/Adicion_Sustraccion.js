@@ -19,7 +19,7 @@ class Adicion_Sustraccion extends Instruccion_1.Instruccion {
     }
     translate() {
         // int a = 0;
-        return this.id.toString() + this.simbolouno.toString() + this.simbolodos.toString();
+        return this.id.translate() + this.simbolouno.toString() + this.simbolodos.toString();
     }
     generarGrafo(g, padre) {
         // Titulo Id
@@ -30,7 +30,7 @@ class Adicion_Sustraccion extends Instruccion_1.Instruccion {
         let padreHijo = nombreHijo;
         //Valor del Id
         nombreHijo = "nodo" + g.contador;
-        g.grafo += "  " + nombreHijo + "[label= \"" + this.id + "\"];\n";
+        g.grafo += "  " + nombreHijo + "[label= \"" + this.id.translate() + "\"];\n";
         g.grafo += "  " + padreHijo + " -> " + nombreHijo + ";\n";
         g.contador++;
         //Simbolo 1

@@ -16,13 +16,13 @@ class Comentario extends Instruccion_1.Instruccion {
         this.comentario = comentario;
     }
     translate() {
-        return this.comentario.toString();
+        return this.comentario.toString() + "\n";
     }
     generarGrafo(g, padre) {
         return null;
     }
     getNombreHijo() {
-        return "CLASE";
+        return "COMENTARIO";
     }
 }
 exports.Comentario = Comentario;

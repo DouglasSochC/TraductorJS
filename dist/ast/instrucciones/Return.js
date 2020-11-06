@@ -16,7 +16,7 @@ class Return extends Instruccion_1.Instruccion {
         this.instrucciones = instrucciones;
     }
     translate() {
-        return "return " + this.instrucciones.translate() + ";";
+        return "return " + this.instrucciones.translate() + ";\n";
     }
     generarGrafo(g, padre) {
         let nombreHijo = "nodo" + g.contador;

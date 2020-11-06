@@ -17,12 +17,14 @@ class MetodoFuncion extends Instruccion_1.Instruccion {
     }
     translate() {
         let cadena = "function " + this.nombre_funcion.toString() + "(";
-        for (let a = 0; a < this.parametros.length; a++) {
-            if (a < this.parametros.length - 1) {
-                cadena += this.parametros[a].translate() + ",";
-            }
-            else {
-                cadena += this.parametros[a].translate();
+        if (this.parametros != null) {
+            for (let a = 0; a < this.parametros.length; a++) {
+                if (a < this.parametros.length - 1) {
+                    cadena += this.parametros[a].translate() + ",";
+                }
+                else {
+                    cadena += this.parametros[a].translate();
+                }
             }
         }
         return cadena + "){\n \n}\n";
@@ -33,14 +35,16 @@ class MetodoFuncion extends Instruccion_1.Instruccion {
         g.grafo += "  " + nombreHijo + "[label=\" Id: " + this.nombre_funcion + "\"];\n";
         g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
         g.contador++;
-        //----------- LISTA DE PARAMETROS -----------
-        for (let x = 0; x < this.parametros.length; x++) {
-            let inst = this.parametros[x];
-            nombreHijo = "nodo" + g.contador;
-            g.grafo += "  " + nombreHijo + "[label=\"" + inst.getNombreHijo() + "\"];\n";
-            g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
-            g.contador++;
-            inst.generarGrafo(g, nombreHijo);
+        if (this.parametros != null) {
+            //----------- LISTA DE PARAMETROS -----------
+            for (let x = 0; x < this.parametros.length; x++) {
+                let inst = this.parametros[x];
+                nombreHijo = "nodo" + g.contador;
+                g.grafo += "  " + nombreHijo + "[label=\"" + inst.getNombreHijo() + "\"];\n";
+                g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
+                g.contador++;
+                inst.generarGrafo(g, nombreHijo);
+            }
         }
         return null;
     }

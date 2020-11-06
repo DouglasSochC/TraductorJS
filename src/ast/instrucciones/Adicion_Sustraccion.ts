@@ -3,7 +3,7 @@ import { ValorGrafo } from "../grafo/ValorGrafo";
 
 export class Adicion_Sustraccion extends Instruccion {
 
-    id: String;
+    id: Instruccion;
     simbolouno: String;
     simbolodos: String;
 
@@ -15,7 +15,7 @@ export class Adicion_Sustraccion extends Instruccion {
      * @param column columna donde se declaro la variable
      * @param valor valor de la expresion asociada a la variable
      */
-    constructor(id: String, simbolouno: String, simbolodos: String, line: Number, column: Number) {
+    constructor(id: Instruccion, simbolouno: String, simbolodos: String, line: Number, column: Number) {
         super(line, column)
         this.id = id;
         this.simbolouno = simbolouno;
@@ -24,7 +24,7 @@ export class Adicion_Sustraccion extends Instruccion {
 
     translate() {
         // int a = 0;
-        return this.id.toString() + this.simbolouno.toString() + this.simbolodos.toString()+";\n";
+        return this.id.translate() + this.simbolouno.toString() + this.simbolodos.toString();
     }
     generarGrafo(g: ValorGrafo, padre: String) {
 
@@ -39,7 +39,7 @@ export class Adicion_Sustraccion extends Instruccion {
         //Valor del Id
         nombreHijo = "nodo" + g.contador;
 
-        g.grafo += "  " + nombreHijo + "[label= \"" + this.id + "\"];\n";
+        g.grafo += "  " + nombreHijo + "[label= \"" + this.id.translate() + "\"];\n";
         g.grafo += "  " + padreHijo + " -> " + nombreHijo + ";\n";
         g.contador++;
 

@@ -16,27 +16,31 @@ class AST extends Instruccion_1.Instruccion {
     }
     translate() {
         let cadena = "";
-        for (let a = 0; a < this.instrucciones.length; a++) {
-            cadena += this.instrucciones[a].translate();
+        if (this.instrucciones != null) {
+            for (let a = 0; a < this.instrucciones.length; a++) {
+                cadena += this.instrucciones[a].translate();
+            }
         }
         return cadena;
     }
     generarGrafo(g, padre) {
-        //----------- LISTA DE INSTRUCCIONES -----------
-        let nombreHijo = "nodo" + g.contador;
-        g.grafo += "  " + nombreHijo + "[label=\"INSTRUCCIONES\"];\n";
-        g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
-        g.contador++;
-        padre = nombreHijo;
-        for (let x = 0; x < this.instrucciones.length; x++) {
-            let inst = this.instrucciones[x];
-            nombreHijo = "nodo" + g.contador;
-            g.grafo += "  " + nombreHijo + "[label=\"" + inst.getNombreHijo() + "\"];\n";
+        if (this.instrucciones != null) {
+            //----------- LISTA DE INSTRUCCIONES -----------
+            let nombreHijo = "nodo" + g.contador;
+            g.grafo += "  " + nombreHijo + "[label=\"INSTRUCCIONES\"];\n";
             g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
             g.contador++;
-            inst.generarGrafo(g, nombreHijo);
+            padre = nombreHijo;
+            for (let x = 0; x < this.instrucciones.length; x++) {
+                let inst = this.instrucciones[x];
+                nombreHijo = "nodo" + g.contador;
+                g.grafo += "  " + nombreHijo + "[label=\"" + inst.getNombreHijo() + "\"];\n";
+                g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
+                g.contador++;
+                inst.generarGrafo(g, nombreHijo);
+            }
+            //----------------------------------------------
         }
-        //----------------------------------------------
     }
     getNombreHijo() {
         throw new Error("Method not implemented.");

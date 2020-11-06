@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Clase = void 0;
+exports.Interface = void 0;
 const Instruccion_1 = require("../Instruccion");
-class Clase extends Instruccion_1.Instruccion {
+class Interface extends Instruccion_1.Instruccion {
     /**
      *  a = 5;
      * @class La instruccion asignacion, modifica el valor de una variable en la tabla de simbolos
@@ -17,13 +17,7 @@ class Clase extends Instruccion_1.Instruccion {
         this.instrucciones = instrucciones;
     }
     translate() {
-        let cadena = "class " + this.nombre_clase.toString() + "{\n constructor(){\n }\n";
-        if (this.instrucciones != null) {
-            for (const ins of this.instrucciones) {
-                cadena += ins.translate();
-            }
-        }
-        return cadena + "\n}\n";
+        return "";
     }
     generarGrafo(g, padre) {
         //Identificador
@@ -50,8 +44,8 @@ class Clase extends Instruccion_1.Instruccion {
         return null;
     }
     getNombreHijo() {
-        return "CLASE";
+        return "INTERFACE";
     }
 }
-exports.Clase = Clase;
-//# sourceMappingURL=Clase.js.map
+exports.Interface = Interface;
+//# sourceMappingURL=Interface.js.map

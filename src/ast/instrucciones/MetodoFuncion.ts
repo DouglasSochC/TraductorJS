@@ -21,7 +21,6 @@ export class MetodoFuncion extends Instruccion {
 
     translate() {
         let cadena = "function " + this.nombre_funcion.toString() + "(";
-        console.log("Estoy en metodofuncion: "+this.parametros);
         if (this.parametros != null) {
             for (let a = 0; a < this.parametros.length; a++) {
                 if (a < this.parametros.length - 1) {

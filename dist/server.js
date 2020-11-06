@@ -15,7 +15,17 @@ app.use(express.json());
 app.get('/', (req, res) => {
     res.send(`Compiladores 1 - Sección B, http://localhost:${app.get('port')}`);
 });
-app.get('/analisis', controller.analizar);
-app.post('/miAuxiliar', controller.miAuxiliar);
+app.post('/analisis', (req, res) => {
+    //console.log(req.body);
+    const { id, datos } = req.body;
+    var retorno = controller.analisis(datos);
+    res.json(retorno);
+});
+app.post('/grafo', (req, res) => {
+    //console.log(req.body);
+    const { id, datos } = req.body;
+    var retorno = controller.grafo(datos);
+    res.json(retorno);
+});
 exports.default = app;
 //# sourceMappingURL=server.js.map

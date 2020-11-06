@@ -17,19 +17,30 @@ class Asignacion extends Instruccion_1.Instruccion {
         this.valor = valor;
     }
     translate() {
-        return this.id + " = " + this.valor.translate() + ";\n";
+        let cadena = "";
+        if (this.id != null) {
+            cadena += this.id.toString();
+        }
+        if (this.valor != null) {
+            cadena += " = " + this.valor.translate() + ";\n";
+        }
+        return cadena;
     }
     generarGrafo(g, padre) {
         //Identificador
-        let nombreHijo = "nodo" + g.contador;
-        g.grafo += "  " + nombreHijo + "[label=\" Id: " + this.id + "\"];\n";
-        g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
-        g.contador++;
-        nombreHijo = "nodo" + g.contador;
-        g.grafo += "  " + nombreHijo + "[label=\"" + this.valor.getNombreHijo() + "\"];\n";
-        g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
-        g.contador++;
-        this.valor.generarGrafo(g, nombreHijo);
+        if (this.id != null) {
+            let nombreHijo = "nodo" + g.contador;
+            g.grafo += "  " + nombreHijo + "[label=\" Id: " + this.id + "\"];\n";
+            g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
+            g.contador++;
+        }
+        if (this.valor != null) {
+            let nombreHijo = "nodo" + g.contador;
+            g.grafo += "  " + nombreHijo + "[label=\"" + this.valor.getNombreHijo() + "\"];\n";
+            g.grafo += "  " + padre + " -> " + nombreHijo + ";\n";
+            g.contador++;
+            this.valor.generarGrafo(g, nombreHijo);
+        }
         return null;
     }
     getNombreHijo() {

@@ -18,7 +18,7 @@ export class Return extends Instruccion {
     }
 
     translate() {        
-        return "return "+this.instrucciones.translate()+";";
+        return "return "+this.instrucciones.translate()+";\n";
     }
     generarGrafo(g: ValorGrafo, padre: String) {
         let nombreHijo = "nodo"+g.contador;

@@ -31,6 +31,8 @@
 	const { Primitivo } = require("../dist/ast/expresiones/Primitivo");
 	const { Type } = require("../dist/ast/Tipo");
 	const { TypeOperation } = require("../dist/ast/Tipo");
+	let errores_encontrados = [];
+	let tockens_encontrados = [];
 %}
 
 
@@ -44,67 +46,68 @@
 "//".*				return 'comentariou' /* ignora comentario de una sola linea */
 [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]	 return 'comentariom'	/* ignora comentarios Multilinea*/
 
-"public"			return 'public_';
-"static"			return 'static_';
-"main"				return 'main_';
-"class"				return 'class_';
-"interface"			return 'interface_';
-"void"				return 'void_';
-"int"				return 'int_';
-"double"			return 'double_';
-"char"				return 'char_';
-"String"			return 'string_';
-"boolean"			return 'boolean_';
-"break"				return 'break_';
-"continue"			return 'continue_';
-"return"			return 'return_';
+"public"			{tockens_encontrados.push(yytext); return 'public_';}
+"static"			{tockens_encontrados.push(yytext); return 'static_';}
+"main"				{tockens_encontrados.push(yytext); return 'main_';}
+"class"				{tockens_encontrados.push(yytext); return 'class_';}
+"interface"			{tockens_encontrados.push(yytext); return 'interface_';}
+"void"				{tockens_encontrados.push(yytext); return 'void_';}
+"int"				{tockens_encontrados.push(yytext); return 'int_';}
+"double"			{tockens_encontrados.push(yytext); return 'double_';}
+"char"				{tockens_encontrados.push(yytext); return 'char_';}
+"String"			{tockens_encontrados.push(yytext); return 'string_';}
+"boolean"			{tockens_encontrados.push(yytext); return 'boolean_';}
+"break"				{tockens_encontrados.push(yytext); return 'break_';}
+"continue"			{tockens_encontrados.push(yytext); return 'continue_';}
+"return"			{tockens_encontrados.push(yytext); return 'return_';}
 
 
-"System.out.println" return 'print_';
-"System.out.print" return 'print_';
-"do"				return 'do_';
-"while"				return 'while_';
-"for"				return 'for_';
-"if"				return 'if_';
-"else"				return 'else_';
+"System.out.println" {tockens_encontrados.push(yytext); return 'print_';}
+"System.out.print"  {tockens_encontrados.push(yytext); return 'print_';}
+"do"				{tockens_encontrados.push(yytext); return 'do_';}
+"while"				{tockens_encontrados.push(yytext); return 'while_';}
+"for"				{tockens_encontrados.push(yytext); return 'for_';}
+"if"				{tockens_encontrados.push(yytext); return 'if_';}
+"else"				{tockens_encontrados.push(yytext); return 'else_';}
 
-","					return 'coma';
-"="					return 'igual';
-";"					return 'pcoma';
-"{"					return 'llaveAbre';
-"}"					return 'llaveCierra';
+","					{tockens_encontrados.push(yytext); return 'coma';}
+"="					{tockens_encontrados.push(yytext); return 'igual';}
+";"					{tockens_encontrados.push(yytext); return 'pcoma';}
+"{"					{tockens_encontrados.push(yytext); return 'llaveAbre';}
+"}"					{tockens_encontrados.push(yytext); return 'llaveCierra';}
 
-"+"					return 'mas';
-"-"					return 'menos';
-"*"					return 'por';
-"/"					return 'division';
-"("					return 'parAbre';
-")"					return 'parCierra';
-"["					return 'corAbre';
-"]"					return 'corCierra';
+"+"					{tockens_encontrados.push(yytext); return 'mas';}
+"-"					{tockens_encontrados.push(yytext); return 'menos';}
+"*"					{tockens_encontrados.push(yytext); return 'por';}
+"/"					{tockens_encontrados.push(yytext); return 'division';}
+"("					{tockens_encontrados.push(yytext); return 'parAbre';}
+")"					{tockens_encontrados.push(yytext); return 'parCierra';}
+"["					{tockens_encontrados.push(yytext); return 'corAbre';}
+"]"					{tockens_encontrados.push(yytext); return 'corCierra';}
 
-"<"					return 'menorQ';
-">"					return 'mayorQ';
+"<"					{tockens_encontrados.push(yytext); return 'menorQ';}
+">"					{tockens_encontrados.push(yytext); return 'mayorQ';}
 
-"&&"				return 'and_';
-"||"				return 'or_';
-"!"					return 'not_';
-"^"					return 'xor_';
+"&&"				{tockens_encontrados.push(yytext); return 'and_';}
+"||"				{tockens_encontrados.push(yytext); return 'or_';}
+"!"					{tockens_encontrados.push(yytext); return 'not_';}
+"^"					{tockens_encontrados.push(yytext); return 'xor_';}
 
-"true"				return 'true_';
-"false"				return 'false_';
+"true"				{tockens_encontrados.push(yytext); return 'true_';}
+"false"				{tockens_encontrados.push(yytext); return 'false_';}
 
-\"[^\"]*\"				{ yytext = yytext.substr(0,yyleng); return 'cadena'; /*//"*/ }
+\"[^\"]*\"			{ yytext = yytext.substr(0,yyleng); tockens_encontrados.push(yytext); return 'cadena'; /*//"*/ }
 
-[0-9]+"."[0-9]+		return 'decimal';
-[0-9]+				return 'entero';
+[0-9]+"."[0-9]+		{tockens_encontrados.push(yytext); return 'decimal';}
+[0-9]+				{tockens_encontrados.push(yytext); return 'entero';}
 
-([a-zA-Z_])[a-zA-Z0-9_]*		return 'identificador';
+([a-zA-Z_])[a-zA-Z0-9_]*		{tockens_encontrados.push(yytext); return 'identificador';}
 [ \r\t]+			{}
 \n					{}
 <<EOF>>				return 'EOF';
 .	{ 
-		console.error('Error léxico: ' + yytext + ', line: ' + yylloc.first_line + ', column: ' + yylloc.first_column); 
+		errores_encontrados.push('Error léxico: ' + yytext + ', line: ' + yylloc.first_line + ', column: ' + yylloc.first_column);
+		//console.error('Error léxico: ' + yytext + ', line: ' + yylloc.first_line + ', column: ' + yylloc.first_column); return null;
 	}
 
 /lex
@@ -127,14 +130,34 @@
 %start INICIO
 
 %% 
-INICIO : INSTRUCCIONES EOF {var root = new AST($1);	return root;}
+INICIO : INSTRUCCIONES EOF {var root = new AST($1); var aux_errores = errores_encontrados; errores_encontrados = []; var aux_tockens = tockens_encontrados; tockens_encontrados = [];	return [root, aux_errores, aux_tockens];}
 	;
+
+/*
+if ($1 != null){
+			$1.push($2);
+			$$ = $1;
+		}else{
+			$$ = $2;
+		};
+		*/
 
 INSTRUCCIONES :
-	  INSTRUCCIONES INSTRUCCION {$1.push($2); $$ = $1;}
-	| INSTRUCCION 				{$$ = [$1];}
+	INSTRUCCIONES INSTRUCCION {
+		$1.push($2);
+		$$ = $1;
+	}
+	| INSTRUCCION	{ $$ = [$1]; }
+	| INSTRUCCIONES error pcoma { errores_encontrados.push('Error Sintactico: ' + yytext + ', line: ' + this._$.first_line + ', column: ' + this._$.first_column); $$ = []; }
+	| INSTRUCCIONES error llaveCierra { errores_encontrados.push('Error Sintactico: ' + yytext + ', line: ' + this._$.first_line + ', column: ' + this._$.first_column); $$ = []; }
+	| error pcoma { errores_encontrados.push('Error Sintactico: ' + yytext + ', line: ' + this._$.first_line + ', column: ' + this._$.first_column); $$ = []; }
+	| error llaveCierra { errores_encontrados.push('Error Sintactico: ' + yytext + ', line: ' + this._$.first_line + ', column: ' + this._$.first_column); $$ = []; }
 	;
-
+/*
+| INSTRUCCIONES error coma { console.log("Error Sintactico Coma : line: " + this._$.first_line + ", column: " + this._$.first_column); $$ = []; }
+	| INSTRUCCIONES error pcoma { console.log("Error Sintactico PuntoComa : line: " + this._$.first_line + ", column: " + this._$.first_column); $$ = []; }
+	| INSTRUCCIONES error parCierra { console.log("Error Sintactico Cierra : line: " + this._$.first_line + ", column: " + this._$.first_column); $$ = []; }
+*/
 INSTRUCCION : MAIN 		{ $$ = $1; }
 	| DECLARACION 		{ $$ = $1; }
 	| CLASE				{ $$ = $1; }
@@ -146,9 +169,10 @@ INSTRUCCION : MAIN 		{ $$ = $1; }
 	| DO_WHILE			{ $$ = $1; }
 	| WHILE				{ $$ = $1; }
 	| FOR				{ $$ = $1; }
-	| INCREMENTODECREMENTO pcoma	{ $$ = $1; }
+//	| INCREMENTODECREMENTO pcoma	{ $$ = $1; }
 	| PRINT				{ $$ = $1; }
 	| COMENTARIO		{ $$ = $1; }
+	| RETURN			{ $$ = $1; }
 	;
 	//| COMENTARIO		{ $$ = $1; }
 
@@ -158,7 +182,7 @@ MAIN: public_ static_ void_ main_ parAbre string_ corAbre corCierra EXPRESION pa
 CLASE : public_ class_ identificador BS_GENERAL { $$ = new Clase($3, $4, this._$.first_line, this._$.first_column); }
 	| public_ class_ identificador llaveAbre llaveCierra { $$ = new Clase($3, null, this._$.first_line, this._$.first_column); }
 	;
-
+//| error pcoma { console.log("Error Sintactico Clase : line: " + this._$.first_line + ", column: " + this._$.first_column); }
 METODO_FUNCION: public_ TIPO_RETORNO identificador parAbre V_PARAMETROS parCierra pcoma { $$ = new MetodoFuncion($3, $5, this._$.first_line, this._$.first_column); }
 	| public_ TIPO_RETORNO identificador parAbre V_PARAMETROS parCierra BS_RETORNO { $$ = new MetodoFuncionSentencia($3, $5, $7, this._$.first_line, this._$.first_column); }
 	| public_ TIPO_RETORNO identificador parAbre parCierra BS_RETORNO { $$ = new MetodoFuncionSentencia($3, null, $6, this._$.first_line, this._$.first_column); }
@@ -204,13 +228,14 @@ TIPO : int_ 	{ $$ = Type.INT; }
 
 //Bloque de Sentencias - Funciones y Metodos
 BS_RETORNO: llaveAbre INSTRUCCIONES llaveCierra { $$ = $2; }
-	| llaveAbre INSTRUCCIONES RETURN llaveCierra { $$ = $2.concat($3); }
 	;
 
 RETURN: return_ EXPRESION pcoma { $$ = new Return($2, this._$.first_line, this._$.first_column); }
+	//| error pcoma { console.log("Error Sintactico Clase : line: " + this._$.first_line + ", column: " + this._$.first_column); }
 	;
 
 ASIGNACION: identificador igual EXPRESION pcoma { $$ = new Asignacion($1, $3, this._$.first_line, this._$.first_column); }
+	//| identificador error pcoma { console.log("Error Sintactico Asignacion : line: " + this._$.first_line + ", column: " + this._$.first_column); $$ = null; }
 	;
 
 LLAMADO_METODO: identificador parAbre PARAMETRO_LLAMADO parCierra pcoma { $$ = new Llamado_Metodo($1, $3, this._$.first_line, this._$.first_column); }
@@ -225,13 +250,13 @@ COMENTARIO : comentariom { $$ = new Comentario($1, this._$.first_line, this._$.f
 	| comentariou { $$ = new Comentario($1,this._$.first_line, this._$.first_column); }
 	;
 
-FOR : for_ parAbre DECLARACION CONDICION pcoma INCREMENTODECREMENTO parCierra BS_CICLO { $$ = new For($3, $4, $6, $8, this._$.first_line, this._$.first_column); }
+FOR : for_ parAbre DECLARACION EXPRESION pcoma EXPRESION parCierra BS_CICLO { $$ = new For($3, $4, $6, $8, this._$.first_line, this._$.first_column); }
 	;
 
-DO_WHILE: do_ BS_CICLO while_ parAbre CONDICION parCierra pcoma { $$ = new DoWhile($5, $2, this._$.first_line, this._$.first_column); }
+DO_WHILE: do_ BS_CICLO while_ parAbre EXPRESION parCierra pcoma { $$ = new DoWhile($5, $2, this._$.first_line, this._$.first_column); }
 	;
 
-WHILE : while_ parAbre CONDICION parCierra BS_CICLO { $$ = new While($3, $5, this._$.first_line, this._$.first_column); }
+WHILE : while_ parAbre EXPRESION parCierra BS_CICLO { $$ = new While($3, $5, this._$.first_line, this._$.first_column); }
 	;
 
 //Bloque de Sentencias - Ciclos
@@ -243,28 +268,17 @@ BREAK_CONTINUE: break_ pcoma { $$ = new Break_Continue($1, this._$.first_line, t
 	| continue_ pcoma { $$ = new Break_Continue($1, this._$.first_line, this._$.first_column); }
 	;
 
-INCREMENTODECREMENTO: identificador mas mas { $$ = new Adicion_Sustraccion($1, $2, $3, this._$.first_line, this._$.first_column); }
-	| identificador menos menos { $$ = new Adicion_Sustraccion($1, $2, $3, this._$.first_line, this._$.first_column); }
-	;
-
-IF: if_ parAbre CONDICION parCierra BS_GENERAL { $$ = new If($3, $5, null, this._$.first_line, this._$.first_column); }
-	| if_ parAbre CONDICION parCierra BS_GENERAL else_ ELSE { $$ = new If($3, $5, $7, this._$.first_line, this._$.first_column); }
-	| if_ parAbre CONDICION parCierra BS_GENERAL else_ IF { $$ = new If_Iterativo($3, $5, $7, this._$.first_line, this._$.first_column); }	
-	| if_ parAbre CONDICION parCierra llaveAbre llaveCierra else_ llaveAbre llaveCierra  { $$ = new If($3, null, null, this._$.first_line, this._$.first_column); }
+IF: if_ parAbre EXPRESION parCierra BS_GENERAL { $$ = new If($3, $5, null, this._$.first_line, this._$.first_column); }
+	| if_ parAbre EXPRESION parCierra BS_GENERAL else_ ELSE { $$ = new If($3, $5, $7, this._$.first_line, this._$.first_column); }
+	| if_ parAbre EXPRESION parCierra BS_GENERAL else_ IF { $$ = new If_Iterativo($3, $5, $7, this._$.first_line, this._$.first_column); }	
+	| if_ parAbre EXPRESION parCierra llaveAbre llaveCierra else_ llaveAbre llaveCierra  { $$ = new If($3, null, null, this._$.first_line, this._$.first_column); }
 	;
 
 ELSE: BS_GENERAL { $$ = new Else($1, this._$.first_line, this._$.first_column); }
 	| llaveAbre llaveCierra { $$ = null; }
 	;
 
-PRINT : print_ parAbre CONDICION parCierra pcoma { $$ = new Print($3, this._$.first_line, this._$.first_column); }
-	;
-
-CONDICION : EXPRESION mayorQ igual EXPRESION 	{ $$ = new OperacionRelacional( TypeOperation.MAYOR_IGUAL, $1, $4, this._$.first_line, this._$.first_column); }
-	| EXPRESION menorQ igual EXPRESION { $$ = new OperacionRelacional( TypeOperation.MENOR_IGUAL, $1, $4, this._$.first_line, this._$.first_column); }
-	| EXPRESION igual igual EXPRESION 	{ $$ = new OperacionRelacional( TypeOperation.IGUAL_IGUAL, $1, $4, this._$.first_line, this._$.first_column); }
-	| EXPRESION not_ igual EXPRESION 	{ $$ = new OperacionRelacional( TypeOperation.DIFERENTE, $1, $4, this._$.first_line, this._$.first_column); }
-	| EXPRESION  { $$ = $1; }
+PRINT : print_ parAbre EXPRESION parCierra pcoma { $$ = new Print($3, this._$.first_line, this._$.first_column); }
 	;
 
 //Bloque de Sentencias - General
@@ -273,23 +287,28 @@ BS_GENERAL : llaveAbre INSTRUCCIONES llaveCierra { $$ = $2; }
 
 EXPRESION : 
 	// Aritmeticas
-	  EXPRESION mas EXPRESION		{ $$ = new OperacionAritmetica( TypeOperation.SUMA, $1, $3, this._$.first_line, this._$.first_column); }
-	| EXPRESION menos EXPRESION		{ $$ = new OperacionAritmetica( TypeOperation.RESTA, $1, $3, this._$.first_line, this._$.first_column); }
-	| EXPRESION por EXPRESION		{ $$ = new OperacionAritmetica( TypeOperation.MULTIPLICACION, $1, $3, this._$.first_line, this._$.first_column); }
-	| EXPRESION division EXPRESION	{ $$ = new OperacionAritmetica( TypeOperation.DIVISION, $1, $3, this._$.first_line, this._$.first_column); }	
+	 EXPRESION mas EXPRESION				{ $$ = new OperacionAritmetica( TypeOperation.SUMA, $1, $3, this._$.first_line, this._$.first_column); }
+	| EXPRESION menos EXPRESION				{ $$ = new OperacionAritmetica( TypeOperation.RESTA, $1, $3, this._$.first_line, this._$.first_column); }
+	| EXPRESION por EXPRESION				{ $$ = new OperacionAritmetica( TypeOperation.MULTIPLICACION, $1, $3, this._$.first_line, this._$.first_column); }
+	| EXPRESION division EXPRESION			{ $$ = new OperacionAritmetica( TypeOperation.DIVISION, $1, $3, this._$.first_line, this._$.first_column); }	
 	// Relacionales
-	| EXPRESION mayorQ EXPRESION	{ $$ = new OperacionRelacional( TypeOperation.MAYOR, $1, $3, this._$.first_line, this._$.first_column); }
-	| EXPRESION menorQ EXPRESION	{ $$ = new OperacionRelacional( TypeOperation.MENOR, $1, $3, this._$.first_line, this._$.first_column); }	
+	| EXPRESION mayorQ EXPRESION			{ $$ = new OperacionRelacional( TypeOperation.MAYOR, $1, $3, this._$.first_line, this._$.first_column); }
+	| EXPRESION menorQ EXPRESION			{ $$ = new OperacionRelacional( TypeOperation.MENOR, $1, $3, this._$.first_line, this._$.first_column); }	
 	// Logicas
-	| EXPRESION or_ EXPRESION		{ $$ = new OperacionLogica( TypeOperation.OR, $1, $3, this._$.first_line, this._$.first_column); }
-	| EXPRESION and_ EXPRESION		{ $$ = new OperacionLogica( TypeOperation.AND, $1, $3, this._$.first_line, this._$.first_column); }
-	| EXPRESION xor_ EXPRESION		{ $$ = new OperacionLogica( TypeOperation.XOR, $1, $3, this._$.first_line, this._$.first_column); }
-	| not_ EXPRESION				{ $$ = new OperacionLogica( TypeOperation.NOT, $2, null, this._$.first_line, this._$.first_column); }
-	| menos EXPRESION %prec uMenos	{ $$ = new OperacionAritmetica( TypeOperation.MENOSUNARIO, $2, null, this._$.first_line, this._$.first_column); }
-	| parAbre EXPRESION parCierra	{ $$ = $2; }
-	| PRIMITIVO						{ $$ = $1; }
+	| EXPRESION or_ EXPRESION				{ $$ = new OperacionLogica( TypeOperation.OR, $1, $3, this._$.first_line, this._$.first_column); }
+	| EXPRESION and_ EXPRESION				{ $$ = new OperacionLogica( TypeOperation.AND, $1, $3, this._$.first_line, this._$.first_column); }
+	| EXPRESION xor_ EXPRESION				{ $$ = new OperacionLogica( TypeOperation.XOR, $1, $3, this._$.first_line, this._$.first_column); }
+	| not_ EXPRESION						{ $$ = new OperacionLogica( TypeOperation.NOT, $2, null, this._$.first_line, this._$.first_column); }
+	| menos EXPRESION %prec uMenos			{ $$ = new OperacionAritmetica( TypeOperation.MENOSUNARIO, $2, null, this._$.first_line, this._$.first_column); }
+	| parAbre EXPRESION parCierra			{ $$ = $2; }
+	| EXPRESION mas mas 					{ $$ = new Adicion_Sustraccion($1, $2, $3, this._$.first_line, this._$.first_column); }
+	| EXPRESION menos menos 				{ $$ = new Adicion_Sustraccion($1, $2, $3, this._$.first_line, this._$.first_column); }
+	| EXPRESION menorQ igual EXPRESION		{ $$ = new OperacionRelacional( TypeOperation.MENOR_IGUAL, $1, $4, this._$.first_line, this._$.first_column); }
+	| EXPRESION mayorQ igual EXPRESION		{ $$ = new OperacionRelacional( TypeOperation.MAYOR_IGUAL, $1, $4, this._$.first_line, this._$.first_column); }
+	| EXPRESION not_ igual EXPRESION		{ $$ = new OperacionRelacional( TypeOperation.DIFERENTE, $1, $4, this._$.first_line, this._$.first_column); }
+	| PRIMITIVO								{ $$ = $1; }
 	;
-//
+
 PRIMITIVO : 
 	  decimal		{ $$ = new Primitivo( $1, this._$.first_line, this._$.first_column); }
 	| entero		{ $$ = new Primitivo( $1, this._$.first_line, this._$.first_column); }
